@@ -1,6 +1,7 @@
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
+import java.io.FileOutputStream;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,5 +35,23 @@ public class ProtobufMessagesTest {
 	}
 	
 	
-	
+	public abstract class BinWritter{
+		
+		public abstract void writeElement(FileOutputStream fos);
+		
+		public void write(String testFilePath){
+			
+			System.out.println(testFilePath);
+			File binFile = new File(testFilePath);
+			
+			try(FileOutputStream fos = new FileOutputStream(binFile)){
+				
+				writeElement(fos);
+				
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+						
+		}
+	}
 }
