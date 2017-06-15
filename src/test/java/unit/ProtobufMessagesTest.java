@@ -1,5 +1,7 @@
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
@@ -20,6 +22,12 @@ public class ProtobufMessagesTest {
 	
 	@Test
 	public void streamingMultipleMessagesTest() throws Exception {
+		
+		String currentClassBinpath = System.getProperty("user.dir").concat(File.separator)
+				.concat("src").concat(File.separator)
+				.concat("test").concat(File.separator)
+				.concat("resources").concat(File.separator);
+		
 		int size = sampleMapper.selectList().size();
 		System.out.println(">>>>>>>>>" + size);
 		assertEquals(size, 5);
