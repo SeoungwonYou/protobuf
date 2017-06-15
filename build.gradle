@@ -1,0 +1,128 @@
+buildscript {
+	ext {
+		springBootVersion = '1.5.2.RELEASE'
+	}
+    repositories {
+		maven { url "https://plugins.gradle.org/m2/" }
+		mavenCentral()
+		
+    }
+    dependencies {
+        classpath 'gradle.plugin.com.google.protobuf:protobuf-gradle-plugin:0.8.1'
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+plugins {
+    id 'java'
+    id 'eclipse'
+    id 'idea'
+    id "com.google.protobuf" version "0.8.1"
+    id "org.asciidoctor.convert" version "1.5.3"
+    id "org.springframework.boot" version "1.5.2.RELEASE"
+}
+
+ext {
+    bootVersion = '1.5.2.RELEASE'
+    snippetsDir = file('build/generated-snippets')
+}
+
+jar {
+
+	baseName = 'protobuf-sample'
+	version = '0.1.0'
+	
+	manifest { 
+	  attributes "Main-Class": ""
+	}
+	
+	from {
+	  configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+	}
+}
+
+repositories {
+	maven { url "https://plugins.gradle.org/m2/" }
+    mavenCentral()
+    jcenter()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+allprojects {
+    [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+    sourceSets {
+    	main {
+	        java {
+	            srcDir 'src/main/java'
+	            srcDir 'src/main/resources'
+	        	srcDir 'build/generated/source/proto/main/java'
+	        }
+	        proto {
+	            srcDir 'proto'
+	        }
+	    }
+	    
+        test {
+            java {
+                srcDirs = ["src/test/java/unit", 'src/test/java/integration']
+            }
+            resources {
+                srcDir "src/test/resources"
+            }
+        }
+    }
+}
+
+configurations.all {
+    exclude group: 'org.slf4j', module: 'log4j-over-slf4j'
+}
+
+dependencies {
+    
+    // Spring boot
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter', version: bootVersion
+    compile group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', version: bootVersion
+	
+    // Logging
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+    runtime group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: bootVersion
+    testCompile group: 'org.mybatis.spring.boot', name: 'mybatis-spring-boot-starter-test', version: '1.3.0'
+    
+    // protobuf
+    compile 'com.google.protobuf:protobuf-java:2.6.1'
+    compile 'com.googlecode.protobuf-java-format:protobuf-java-format:1.4'
+    
+    // DB
+    //compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: bootVersion
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc', version: bootVersion
+    compile group: 'org.mybatis.spring.boot', name: 'mybatis-spring-boot-starter', version: '1.1.1'
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.1.1'
+    
+	// kafka
+	//compile 'org.apache.kafka:kafka-clients:0.10.1.0'
+	//compile 'org.springframework.kafka:spring-kafka:1.1.5.RELEASE'
+	
+	compile 'org.apache.commons:commons-lang3:3.4'
+	compile 'org.apache.commons:commons-collections4:4.1'
+	compile 'commons-io:commons-io:2.4'
+	
+	compile group: 'junit', name: 'junit', version: '4.12'
+	
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '3.2.1'
+}
+
+
+protobuf {
+    protoc {
+        // Download from repositories
+        artifact = 'com.google.protobuf:protoc:2.6.1-build2'
+    }
+}

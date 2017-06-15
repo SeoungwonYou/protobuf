@@ -1,0 +1,5 @@
+spring:
+  profiles:
+    active: real
+logging:
+  config: classpath:logback-real.xml

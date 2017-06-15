@@ -1,0 +1,19 @@
+package sample_proto;
+
+option java_package = "com.sample.protobuf";
+
+message DataMap {
+  enum DataType {
+    STANDARD = 1;
+    BASE = 2;
+  }
+  optional DataType DataType = 1;
+  optional int64 timestamp = 2;
+  repeated SampleData smapleData = 3;
+}
+
+message SampleData {
+  optional int64 item1 = 1;
+  optional int64 item2 = 2;
+  optional int64 item3 = 3;
+}

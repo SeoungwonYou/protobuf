@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sample.protobuff.mapper.SampleMapper">
+    
+    
+    <select id="selectList" resultType="linkSpeed">
+        SELECT 
+        	item1, 
+        	item2, 
+        	item3, 
+        	update_time 
+        FROM 
+        	public.sample_data
+		limit 5
+    </select>
+
+    
+</mapper>
